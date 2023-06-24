@@ -27,13 +27,13 @@
 例如查找关键字为 web assembly, rust 相关的论文，将结果输出到相对路径为 summary.txt 的位置，可以在项目根目录下执行：
 
 ```shell
-python3 paper_seek.py --keywords "web assembly, rust" --output "summary.txt"
+python3 paper_seeker.py --keywords "web assembly, rust" --output "summary.txt"
 ```
 
 查找关键字为 garbage collection, golang 相关的论文，将结果输出到命令行，只要 3 篇论文，并保存 pdf,可以在项目根目录下执行：
 
 ```shell
-python3 paper_seek.py --keywords "garbage collection" --save_pdf --limit 3
+python3 paper_seeker.py --keywords "garbage collection" --save_pdf --limit 3
 ```
 
 这样搜索到的论文 pdf 文件将会保存到 `./pdf/<timestamp>/...` 中。
