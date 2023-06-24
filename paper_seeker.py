@@ -2,6 +2,7 @@ import os
 import time
 import tempfile
 import argparse
+import subprocess
 
 import requests
 import tenacity
@@ -10,7 +11,6 @@ import chat_paper
 
 SEARCH_API_URL = "https://api.semanticscholar.org/graph/v1/paper/search"
 GET_DETAILS_API_URL = "https://api.semanticscholar.org/graph/v1/paper/batch"
-API_KEY = "RkqCd90Glr7ftwkLozojD2kYorSQ6H6c5OH7uYER"
 
 
 class PaperInfo:
@@ -33,22 +33,10 @@ class PaperInfo:
             self.open_access_pdf = info_dict["openAccessPdf"]["url"]
 
 
-fields = [
-    "title",
-    "year",
-    "url",
-    "authors",
-    "abstract",
-    "isOpenAccess",
-    "openAccessPdf",
-]
-
-
 def search_papers(keywords: list[str], limit: int = 10, offset: int = 0) -> list[str]:
     try:
         response = requests.get(
             SEARCH_API_URL,
-            headers={"x-api-key": API_KEY},
             params={
                 "query": " ".join(keywords),
                 "limit": limit,
@@ -71,6 +59,17 @@ def search_papers(keywords: list[str], limit: int = 10, offset: int = 0) -> list
     except Exception as e:
         print(e)
     return []
+
+
+fields = [
+    "title",
+    "year",
+    "url",
+    "authors",
+    "abstract",
+    "isOpenAccess",
+    "openAccessPdf",
+]
 
 
 def get_papers_details(ids: list[str]) -> list[PaperInfo]:
@@ -135,11 +134,19 @@ def download_all_pdf(infos: list[PaperInfo], save_pdf: bool = True) -> str:
 
 
 def main(args: argparse.Namespace):
-    ids = search_papers(args.keywords.split(","), limit=args.limit)
+    ids = search_papers(args.keywords.split(","), limit=args.limit, offset=args.offset)
     infos = get_papers_details(ids)
     dir_path = download_all_pdf(infos, args.save_pdf)
 
-    os.system("python3 chat_paper.py --pdf_path {}".format(dir_path))
+    command = "python3 chat_paper.py --pdf_path {}".format(dir_path)
+    result = subprocess.run(command, shell=True, stdout=subprocess.PIPE)
+    output = result.stdout.decode("utf-8")
+
+    if not args.output:
+        print(output)
+    else:
+        with open(args.output, "w") as f:
+            f.write(output)
 
 
 if __name__ == "__main__":
@@ -153,5 +160,11 @@ if __name__ == "__main__":
 
     # number of available papers
     parser.add_argument("--limit", type=int, default=5)
+
+    # offset of searching
+    parser.add_argument("--offset", type=int, default=0)
+
+    # output path, if none, output to stdout
+    parser.add_argument("--output", "-o", type=str)
 
     main(parser.parse_args())
