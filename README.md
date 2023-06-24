@@ -8,7 +8,7 @@
 
 配置 `apikey.ini` 和下载依赖，请参考[这里](https://github.com/kaixindelele/ChatPaper/tree/main#%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4)。
 
-注意，本项目额外添加了 PROXY 字段，可以设置 PROXY 为代理开启的端口（例如 http://127.0.0.1:7890），这样就不需要设置全局代理了。(也可以不配置 PROXY 直接使用全局代理)
+注意，本项目额外添加了 PROXY 字段，可以设置 PROXY 为代理开启的端口（例如 http://127.0.0.1:7890 ），这样就不需要设置全局代理了。(也可以不配置 PROXY 直接使用全局代理)
 
 ### Step 2 调用 paper_seeker.py
 
