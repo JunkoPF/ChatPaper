@@ -305,6 +305,9 @@ class Reader:
         # 获取某个键对应的值
         self.chat_api_list = self.config.get('OpenAI', 'OPENAI_API_KEYS')[1:-1].replace('\'', '').split(',')
         self.chat_api_list.append(OPENAI_KEY)
+        
+        # 设置 proxy
+        openai.proxy = self.config.get('OpenAI', 'PROXY')
 
         # prevent short strings from being incorrectly used as API keys.
         self.chat_api_list = [api.strip() for api in self.chat_api_list if len(api) > 20]

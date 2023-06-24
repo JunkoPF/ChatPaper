@@ -9,3 +9,6 @@ build/
 .idea/*
 export
 export/*
+
+pdf/
+.vscode/
