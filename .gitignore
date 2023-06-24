@@ -12,3 +12,5 @@ export/*
 
 pdf/
 .vscode/
+
+apikey.ini
